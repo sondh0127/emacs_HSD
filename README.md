@@ -1,4 +1,10 @@
 # emacs_HSD
+# download and install cMake
+https://cmake.org/download/
+extract and open cmake folder
+./bootstrap
+  make
+  make install
 # config for irony/company - UBUNTU 
 sudo apt-get install libclang-3.5-dev 
 
