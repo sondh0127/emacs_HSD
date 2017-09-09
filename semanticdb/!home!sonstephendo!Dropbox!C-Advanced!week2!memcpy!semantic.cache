@@ -1,0 +1,100 @@
+;; Object semanticdb-project-database-file
+;; SEMANTICDB Tags save file
+(semanticdb-project-database-file "semanticdb-project-database-file"
+  :tables
+  (list
+    (semanticdb-table "semanticdb-table"
+      :major-mode c-mode
+      :tags 
+        '( ("stdio.h" include (:system-flag t) nil [1 19])
+            ("stdlib.h" include (:system-flag t) nil [20 39])
+            ("time.h" include (:system-flag t) nil [40 57])
+            ("string.h" include (:system-flag t) nil [58 77])
+            ("SMALL_NUMBER" variable (:constant-flag t) nil [86 98])
+            ("memcpy" function
+               (:pointer 1
+                :arguments 
+                  ( ("region1" variable
+                       (:pointer 1
+                        :type "void")
+                        (reparse-symbol arg-sub-list) [116 131])
+                    ("region2" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "void")
+                        (reparse-symbol arg-sub-list) [132 152])
+                    ("n" variable (:type ("size_t" type (:type "class") nil nil)) (reparse-symbol arg-sub-list) [153 162]))                  
+                :type "void")
+                nil [103 354])
+            ("int_compare" function
+               (:arguments 
+                  ( ("x" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "void")
+                        (reparse-symbol arg-sub-list) [566 580])
+                    ("y" variable
+                       (:pointer 1
+                        :constant-flag t
+                        :type "void")
+                        (reparse-symbol arg-sub-list) [581 595]))                  
+                :type "int")
+                nil [550 630])
+            ("search" function
+               (:arguments 
+                  ( ("buf" variable
+                       (:pointer 1
+                        :type "void")
+                        (reparse-symbol arg-sub-list) [670 680])
+                    ("size" variable (:type "int") (reparse-symbol arg-sub-list) [681 690])
+                    ("l" variable (:type "int") (reparse-symbol arg-sub-list) [691 697])
+                    ("r" variable (:type "int") (reparse-symbol arg-sub-list) [698 704])
+                    ("item" variable
+                       (:pointer 1
+                        :type "void")
+                        (reparse-symbol arg-sub-list) [705 716])
+                    ("int_compare" function
+                       (:function-pointer t
+                        :arguments 
+                          ( ("" variable
+                               (:pointer 1
+                                :constant-flag t
+                                :type "void")
+                                (reparse-symbol arg-sub-list) [740 752])
+                            ("" variable
+                               (:pointer 1
+                                :constant-flag t
+                                :type "void")
+                                (reparse-symbol arg-sub-list) [753 765]))                          
+                        :type "int")
+                        nil nil))                  
+                :type "int")
+                nil [659 1034])
+            ("createArray" function
+               (:pointer 1
+                :arguments 
+                  ( ("size" variable (:type "int") (reparse-symbol arg-sub-list) [1052 1061]))                  
+                :type "int")
+                nil [1035 1230])
+            ("printarr" function
+               (:arguments 
+                  ( ("a" variable
+                       (:dereference 1
+                        :type "int")
+                        (reparse-symbol arg-sub-list) [1286 1294])
+                    ("size" variable (:type "int") (reparse-symbol arg-sub-list) [1295 1304]))                  
+                :type "void")
+                nil [1272 1386])
+            ("main" function (:type "int") nil [1388 1736]))          
+      :file "preclass.c"
+      :pointmax 1738
+      :fsize 1737
+      :lastmodtime '(22957 959 0 0)
+      :unmatched-syntax nil
+      :lexical-table 
+        '(("SMALL_NUMBER" . ((number "20" 99 . 101)))
+          )
+))
+  :file "!home!sonstephendo!Dropbox!C-Advanced!week2!memcpy!semantic.cache"
+  :semantic-tag-version "2.0"
+  :semanticdb-version "2.2")
