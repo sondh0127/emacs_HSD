@@ -6,6 +6,7 @@
   "Reset `gc-cons-threshold' to its default value."
   (setq gc-cons-threshold 800000))
 ;;;; ==================================================
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 5)))
 
 (use-package sr-speedbar
   :ensure t
@@ -24,13 +25,6 @@
   (with-current-buffer sr-speedbar-buffer-name
     (setq window-size-fixed 'width))
   )
-
-(use-package smooth-scrolling
-  :ensure t
-  :config
-  (progn
-    (setq-default smooth-scroll-margin 2)
-    (smooth-scrolling-mode)))
 
 (use-package smooth-scrolling
   :ensure t
@@ -363,7 +357,7 @@
 	company-dabbrev-downcase        nil
 	company-backends                '((company-irony company-gtags))
 	)
-  :bind ("C-; " . company-complete-common)
+  :bind ("C-SPC " . company-complete-common)
   )
 
 (use-package company-c-headers

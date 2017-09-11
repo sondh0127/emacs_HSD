@@ -8,10 +8,10 @@
   "Reset `gc-cons-threshold' to its default value."
   (setq gc-cons-threshold 800000))
 ;;;; ==================================================
-
+(setq mouse-wheel-scroll-amount '(3 ((shift) . 5)))
 #+END_SRC
 (setq mouse-wheel-progressive-speed nil
-      mouse-wheel-scroll-amount '(1 ((shift) . 5))
+      mouse-wheel-scroll-amount '(3 ((shift) . 5))
       scroll-conservatively 101)
 * sr-speedbar
 #+BEGIN_SRC emacs-lisp
@@ -35,15 +35,6 @@
 #+END_SRC
 	  
 * Smooth scrolling
-#+BEGIN_SRC emacs-lisp
-(use-package smooth-scrolling
-  :ensure t
-  :config
-  (progn
-    (setq-default smooth-scroll-margin 2)
-    (smooth-scrolling-mode)))
-#+END_SRC
-	  * Smooth scrolling
 #+BEGIN_SRC emacs-lisp
 (use-package smooth-scrolling
   :ensure t
@@ -453,7 +444,7 @@ sudo apt-get install global
 	company-dabbrev-downcase        nil
 	company-backends                '((company-irony company-gtags))
 	)
-  :bind ("C-; " . company-complete-common)
+  :bind ("C-SPC " . company-complete-common)
   )
 
 (use-package company-c-headers
