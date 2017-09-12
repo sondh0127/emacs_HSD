@@ -8,7 +8,7 @@ extract and open cmake folder
 
 make
 
-make install
+sudo make install
 # config for irony/company - UBUNTU 
 sudo apt-get install libclang-3.5-dev 
 
