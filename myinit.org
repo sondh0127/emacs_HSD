@@ -1,4 +1,4 @@
-* Speed up` emacs
+* Speed up emacs
 #+BEGIN_SRC emacs-lisp
 ;;;; SPEED UP EMACS ====================================
 ;; Decrease the number of garbage collection invocations
@@ -8,11 +8,9 @@
   "Reset `gc-cons-threshold' to its default value."
   (setq gc-cons-threshold 800000))
 ;;;; ==================================================
-(setq mouse-wheel-scroll-amount '(3 ((shift) . 5)))
+
 #+END_SRC
-(setq mouse-wheel-progressive-speed nil
-      mouse-wheel-scroll-amount '(3 ((shift) . 5))
-      scroll-conservatively 101)
+
 * sr-speedbar
 #+BEGIN_SRC emacs-lisp
 (use-package sr-speedbar
@@ -42,6 +40,10 @@
   (progn
     (setq-default smooth-scroll-margin 2)
     (smooth-scrolling-mode)))
+
+(setq mouse-wheel-progressive-speed nil
+      mouse-wheel-scroll-amount '(3 ((shift) . 5))
+      scroll-conservatively 101)
 #+END_SRC
 	  
 * Toggle comment using C-M-/
@@ -71,7 +73,7 @@
 (tool-bar-mode -1)
 (cua-mode t)
 ;;(speedbar 1)
-
+;; sr-speedbar instead
 (global-visual-line-mode 1)
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
@@ -115,8 +117,6 @@
   (add-hook 'c-mode-hook 'flycheck-irony-setup))
 
 #+END_SRC
-
-
 * Yasnippet
 #+BEGIN_SRC emacs-lisp
 (use-package yasnippet
@@ -144,7 +144,6 @@
 (use-package try
 :ensure t)
 #+END_SRC
-
 * Org mode
 #+BEGIN_SRC emacs-lisp
 (use-package org
@@ -181,8 +180,6 @@
 	:config
 	(powerline-moe-theme))
 #+END_SRC
-
-
 * IBuffer
 #+BEGIN_SRC emacs-lisp
   (global-set-key (kbd "C-x C-b") 'ibuffer)
@@ -219,10 +216,6 @@
   ;; Don't ask for confirmation to delete marked buffers
   (setq ibuffer-expert t)
 #+END_SRC
-(defalias 'list-buffers 'ibuffer)
-;; make ibuffer default
-;; C-x b	switch-buffer
-;; C-x C-b	list-buffers
 * Tabbar show file
 #+BEGIN_SRC emacs-lisp
 (use-package tabbar
@@ -233,8 +226,6 @@
 
 * Misc packages
   #+BEGIN_SRC emacs-lisp
-
-
 (defalias 'redo 'undo-tree-redo)
 (global-set-key (kbd "C-z") 'undo) ;; (Ctrl+z)
 (global-set-key (kbd "C-y") 'redo) ;; (Ctrl+y); 
@@ -308,17 +299,6 @@ Swiper gives us a really efficient incremental search with regular expressions
 (global-set-key (kbd "C-S-<down-mouse-1>")  'mc/add-cursor-on-click)
 
 #+END_SRC
-* Semantic
-#+BEGIN_SRC emacs-lisp
-
-
-#+END_SRC
-(semantic-mode 1)
-(global-semanticdb-minor-mode 1)
-(defun my:add-semantic-to-autocomplete() 
-  (add-to-list 'ac-sources 'ac-source-semantic)
-)
-(add-hook 'c-mode-common-hook 'my:add-semantic-to-autocomplete)
 
 * which key
 Brings up some help
@@ -407,7 +387,6 @@ sudo apt-get install global
 #+END_SRC
 
 * Irony/ Company compilation
-
 #+BEGIN_SRC emacs-lisp
 ;; == irony-mode ==
 (use-package irony
@@ -454,7 +433,7 @@ sudo apt-get install global
 
 #+END_SRC
 
-* test
+* testing...
 #+BEGIN_SRC emacs-lisp
 ;; unset C- and M- digit keys
 (dotimes (n 10)
@@ -462,6 +441,7 @@ sudo apt-get install global
   (global-unset-key (kbd (format "M-%d" n)))
   )
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-c"))
 (global-unset-key (kbd "C-x C-z"))
 (global-auto-revert-mode t)
 (add-hook 'c-mode-common-hook
