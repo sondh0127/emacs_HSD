@@ -1,3 +1,8 @@
+# new install type
+
+go cmake-3.9.2/
+./setup
+
 # emacs_HSD
 # download and install cMake
 https://cmake.org/download/
