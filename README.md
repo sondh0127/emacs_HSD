@@ -1,7 +1,7 @@
 # new automatic install
 ## 1. run:
 ./setup_HSD
--type password for sudo
+- type password for sudo
 
 ## 2. emacs activating
 -open emacs then:
