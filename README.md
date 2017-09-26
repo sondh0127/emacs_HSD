@@ -1,14 +1,14 @@
-# new auto install
-1. run:
+# new automatic install
+## 1. run:
 ./setup_HSD
 type password for sudo
 
-# emacs activating
-2. open emacs then:
+## 2. emacs activating
+ open emacs then:
 M-x irony-install-server
 
 # (old) emacs_HSD manual install
-# download and install cMake
+## download and install cMake
 https://cmake.org/download/
 
 extract and open cmake folder
@@ -18,9 +18,9 @@ extract and open cmake folder
 make
 
 sudo make install
-# config for irony/company - UBUNTU 
+## config for irony/company - UBUNTU 
 sudo apt-get install libclang-3.5-dev 
 
 sudo apt-get install global
-# emacs activating
+## emacs activating
 M-x irony-install-server
