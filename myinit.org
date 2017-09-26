@@ -13,12 +13,15 @@
 
 * sr-speedbar
 #+BEGIN_SRC emacs-lisp
+
+#+END_SRC
 (use-package sr-speedbar
   :ensure t
   :defer t
   :init
   ;; Show tree on the left side
   (setq sr-speedbar-right-side nil)
+  (setq sr-speedbar-auto-refresh t)
   ;;(setq speedbar-show-unknown-files t)
   ;; Show all files
   ;; Bigger size (default is 24)
@@ -28,10 +31,9 @@
   (sr-speedbar-open)
   :config
   (with-current-buffer sr-speedbar-buffer-name
-    (setq window-size-fixed 'width))
-  )
-#+END_SRC
-	  
+    (setq window-size-fixed 'width))  
+  :bind ("<f9>" . sr-speedbar-toggle)
+  )	  
 * Smooth scrolling
 #+BEGIN_SRC emacs-lisp
 (use-package smooth-scrolling
@@ -72,6 +74,8 @@
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (cua-mode t)
+(setq-default cursor-type 'bar) 
+
 ;;(speedbar 1)
 ;; sr-speedbar instead
 (global-visual-line-mode 1)
@@ -94,11 +98,15 @@
                     :width 'normal)
 #+END_SRC
 * Undo Tree
-  #+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp
     (use-package undo-tree
     :ensure t
     :init
     (global-undo-tree-mode))
+
+(defalias 'redo 'undo-tree-redo)
+(global-set-key (kbd "C-z") 'undo) ;; (Ctrl+z)
+(global-set-key (kbd "C-y") 'redo) ;; (Ctrl+y); 
   #+END_SRC
 * Flycheck
 #+BEGIN_SRC emacs-lisp
@@ -125,14 +133,6 @@
 	(yas-global-mode 1))
 #+END_SRC
 
-* CCMode custom
-#+BEGIN_SRC emacs-lisp
-;;CC spacing
-(require 'cc-mode)
-(setq-default c-basic-offset 4 c-default-style "linux")
-(setq-default tab-width 4 indent-tabs-mode t)
-(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
-#+END_SRC
 
 * electric-pair-mode
 #+BEGIN_SRC emacs-lisp
@@ -158,27 +158,18 @@
 
 * Themes and modeline
 #+BEGIN_SRC emacs-lisp
-
 (use-package color-theme
-:ensure t)
-
-(use-package base16-theme
-	:ensure t)
-
+      :ensure t)
 (use-package moe-theme
-	:ensure t)
+:ensure t
+:config (load-theme 'moe-dark t)
+)
 
-(use-package eziam-theme
-	:ensure t)
-
-(use-package alect-themes
-	:ensure t)
-
-(moe-light)
 (use-package powerline
-	:ensure t
-	:config
-	(powerline-moe-theme))
+:ensure t
+:config
+(powerline-moe-theme)
+)
 #+END_SRC
 * IBuffer
 #+BEGIN_SRC emacs-lisp
@@ -226,9 +217,7 @@
 
 * Misc packages
   #+BEGIN_SRC emacs-lisp
-(defalias 'redo 'undo-tree-redo)
-(global-set-key (kbd "C-z") 'undo) ;; (Ctrl+z)
-(global-set-key (kbd "C-y") 'redo) ;; (Ctrl+y); 
+
 
   ;; Highlights the current cursor line
   (global-hl-line-mode t)
@@ -286,16 +275,16 @@ Swiper gives us a really efficient incremental search with regular expressions
 #+END_SRC
 ("C-r" . swiper)
 
-* multiple-cursors
+* Multiple-cursors
 #+BEGIN_SRC emacs-lisp
 ;; Multiple Cursors
 (use-package multiple-cursors
   :ensure t
 )
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C-+") 'mc/edit-lines)
 (global-set-key (kbd "C->")  'mc/mark-next-like-this)
 (global-set-key (kbd "C-<")  'mc/mark-previous-like-this)
-(global-set-key (kbd "C-* C-*")  'mc/mark-all-like-this)
+(global-set-key (kbd "C-|")  'mc/mark-all-like-this)
 (global-set-key (kbd "C-S-<down-mouse-1>")  'mc/add-cursor-on-click)
 
 #+END_SRC
@@ -309,19 +298,118 @@ Brings up some help
 	(which-key-mode))
 #+END_SRC
 
-* ggtags
-sudo apt-get install global
+
+
+* Irony compilation
 #+BEGIN_SRC emacs-lisp
-;;ggtags source code navigation
-(use-package ggtags
-	:ensure t
-	:config 
-	(add-hook 'c-mode-common-hook
-          (lambda ()
-            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-              (ggtags-mode 1))))
-)
+;; == irony-mode ==
+(use-package irony
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  :config
+  ;; replace the `completion-at-point' and `complete-symbol' bindings in
+  ;; irony-mode's buffers by irony-mode's function
+  (defun my-irony-mode-hook ()
+    (define-key irony-mode-map [remap completion-at-point]
+      'irony-completion-at-point-async)
+    (define-key irony-mode-map [remap complete-symbol]
+      'irony-completion-at-point-async))
+  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+  )
 #+END_SRC
+
+* Company-mode
+#+BEGIN_SRC emacs-lisp
+;; == company-mode ==
+(use-package company
+  :ensure t
+  :defer t
+  :init (add-hook 'after-init-hook 'global-company-mode)
+  :bind ("<backtab>" . company-complete)
+  :config
+  (use-package company-irony :ensure t :defer t)
+  (setq company-idle-delay              0.1
+	company-minimum-prefix-length   2
+	company-show-numbers            t
+	company-tooltip-limit           20
+	company-dabbrev-downcase        nil
+	company-backends                '((company-irony company-gtags))
+	)
+  :bind ("C-SPC " . company-complete-common)
+  )
+
+(use-package company-c-headers
+  :ensure t
+  :config
+  (add-to-list 'company-backends 'company-c-headers))
+#+END_SRC
+* Set some key...
+#+BEGIN_SRC emacs-lisp
+;; unset C- and M- digit keys
+(dotimes (n 10)
+  (global-unset-key (kbd (format "C-%d" n)))
+  (global-unset-key (kbd (format "M-%d" n)))
+  )
+(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-c"))
+(global-unset-key (kbd "C-x C-z"))
+
+(global-auto-revert-mode t)
+(add-hook 'c-mode-common-hook
+  (lambda()
+    (local-set-key (kbd "C-2") 'hs-show-block)
+    (local-set-key (kbd "C-1")  'hs-hide-block)
+    (local-set-key (kbd "C-4")    'hs-hide-all)
+    (local-set-key (kbd "C-3")  'hs-show-all)
+	(local-set-key [(shift mouse-2)] 'hs-mouse-toggle-hiding)
+    (hs-minor-mode t)))
+
+#+END_SRC
+
+* Debugging
+#+BEGIN_SRC emacs-lisp
+(setq
+ ;; use gdb-many-windows by default
+ gdb-many-windows t
+
+ ;; Non-nil means display source file containing the main routine at startup
+ gdb-show-main t
+ )
+#+END_SRC
+
+* Aggressive-indent
+#+BEGIN_SRC emacs-lisp
+;; Keeps code correctly indented during editing.
+(use-package aggressive-indent
+  :ensure t
+  :config
+  (global-aggressive-indent-mode t)
+  (add-to-list 'aggressive-indent-excluded-modes 'latex-mode)
+  (add-to-list 'aggressive-indent-excluded-modes 'org-edit-src-code)
+  (add-to-list 'aggressive-indent-excluded-modes 'haskell-mode)
+  (add-to-list
+  'aggressive-indent-dont-indent-if
+  '(and (derived-mode-p 'c-mode)
+       (null (string-match "\\([;{}]\\|\\b\\(if\\|for\\|while\\)\\b\\)"
+                           (thing-at-point 'line))))))
+  
+#+END_SRC
+* CCMode custom
+#+BEGIN_SRC emacs-lisp
+
+#+END_SRC
+;;CC spacing
+(require 'cc-mode)
+(setq-default c-basic-offset 4 c-default-style "linux")
+;;(setq-default tab-width 4 indent-tabs-mode t)
+(setq-default tab-width 4)
+
+(define-key c-mode-base-map (kbd "RET") 'newline-and-indent)
 * Smartparens (need to learn)
 #+BEGIN_SRC emacs-lisp
 (use-package smartparens
@@ -386,82 +474,21 @@ sudo apt-get install global
 ;;--------------------------------------------
 #+END_SRC
 
-* Irony/ Company compilation
+* ggtags
+sudo apt-get install global
 #+BEGIN_SRC emacs-lisp
-;; == irony-mode ==
-(use-package irony
-  :ensure t
-  :defer t
-  :init
-  (add-hook 'c++-mode-hook 'irony-mode)
-  (add-hook 'c-mode-hook 'irony-mode)
-  (add-hook 'objc-mode-hook 'irony-mode)
-  :config
-  ;; replace the `completion-at-point' and `complete-symbol' bindings in
-  ;; irony-mode's buffers by irony-mode's function
-  (defun my-irony-mode-hook ()
-    (define-key irony-mode-map [remap completion-at-point]
-      'irony-completion-at-point-async)
-    (define-key irony-mode-map [remap complete-symbol]
-      'irony-completion-at-point-async))
-  (add-hook 'irony-mode-hook 'my-irony-mode-hook)
-  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-  )
-
-;; == company-mode ==
-(use-package company
-  :ensure t
-  :defer t
-  :init (add-hook 'after-init-hook 'global-company-mode)
-  :bind ("<backtab>" . company-complete)
-  :config
-  (use-package company-irony :ensure t :defer t)
-  (setq company-idle-delay              0.1
-	company-minimum-prefix-length   2
-	company-show-numbers            t
-	company-tooltip-limit           20
-	company-dabbrev-downcase        nil
-	company-backends                '((company-irony company-gtags))
-	)
-  :bind ("C-SPC " . company-complete-common)
-  )
-
-(use-package company-c-headers
-  :ensure t
-  :config
-  (add-to-list 'company-backends 'company-c-headers))
+;;ggtags source code navigation
+(use-package ggtags
+	:ensure t
+	:config 
+	(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (ggtags-mode 1))))
+)
+#+END_SRC
+* treemacs
+#+BEGIN_SRC emacs-lisp
 
 #+END_SRC
 
-* testing...
-#+BEGIN_SRC emacs-lisp
-;; unset C- and M- digit keys
-(dotimes (n 10)
-  (global-unset-key (kbd (format "C-%d" n)))
-  (global-unset-key (kbd (format "M-%d" n)))
-  )
-(global-unset-key (kbd "C-z"))
-(global-unset-key (kbd "C-c"))
-(global-unset-key (kbd "C-x C-z"))
-(global-auto-revert-mode t)
-(add-hook 'c-mode-common-hook
-  (lambda()
-    (local-set-key (kbd "C-2") 'hs-show-block)
-    (local-set-key (kbd "C-1")  'hs-hide-block)
-    (local-set-key (kbd "C-4")    'hs-hide-all)
-    (local-set-key (kbd "C-3")  'hs-show-all)
-	(local-set-key [(shift mouse-2)] 'hs-mouse-toggle-hiding)
-    (hs-minor-mode t)))
-
-#+END_SRC
-
-* Debugging
-#+BEGIN_SRC emacs-lisp
-(setq
- ;; use gdb-many-windows by default
- gdb-many-windows t
-
- ;; Non-nil means display source file containing the main routine at startup
- gdb-show-main t
- )
-#+END_SRC
