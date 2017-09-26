@@ -1,9 +1,13 @@
-# new install type
+# new auto install
+1. run:
+./setup_HSD
+type password for sudo
 
-go cmake-3.9.2/
-./setup
+# emacs activating
+2. open emacs then:
+M-x irony-install-server
 
-# emacs_HSD
+# (old) emacs_HSD manual install
 # download and install cMake
 https://cmake.org/download/
 

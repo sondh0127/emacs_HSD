@@ -13,8 +13,6 @@
 
 * sr-speedbar
 #+BEGIN_SRC emacs-lisp
-
-#+END_SRC
 (use-package sr-speedbar
   :ensure t
   :defer t
@@ -33,7 +31,9 @@
   (with-current-buffer sr-speedbar-buffer-name
     (setq window-size-fixed 'width))  
   :bind ("<f9>" . sr-speedbar-toggle)
-  )	  
+  )
+#+END_SRC
+	  
 * Smooth scrolling
 #+BEGIN_SRC emacs-lisp
 (use-package smooth-scrolling
